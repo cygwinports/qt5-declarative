@@ -1,0 +1,14 @@
+--- origsrc/qtdeclarative-opensource-src-5.1.0/src/qml/qml/qqmlimport.cpp	2013-07-02 02:10:20.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.1.0/src/qml/qml/qqmlimport.cpp	2013-08-18 14:20:29.966943900 -0500
+@@ -1486,6 +1486,11 @@ QString QQmlImportDatabase::resolvePlugi
+                          << QLatin1String(".so")
+                          << QLatin1String(".bundle"),
+                          QLatin1String("lib"));
++# elif defined(Q_OS_CYGWIN)
++    return resolvePlugin(typeLoader, qmldirPath, qmldirPluginPath, baseName,
++                         QStringList()
++                         << QLatin1String(".dll"),
++                         QLatin1String("cyg"));
+ # else  // Generic Unix
+     QStringList validSuffixList;
+ 

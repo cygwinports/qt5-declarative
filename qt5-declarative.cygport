@@ -1,0 +1,107 @@
+inherit qt5-qmake
+
+NAME="qt5-declarative"
+VERSION=5.1.0
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="Qt C++ application framework (QML library)"
+DESCRIPTION="Qt is a cross-platform application framework for desktop and
+embedded development. Qt enables programmers to create advanced GUI
+applications once and deploy them to Windows, Mac OS X and Linux without
+rewriting the source code. Companies using Qt can leverage software
+investments made on one platform across many others."
+HOMEPAGE="http://qt-project.org/"
+SRC_URI="http://download.qt-project.org/official_releases/qt/${VERSION%.*}/${VERSION}/submodules/qtdeclarative-opensource-src-${VERSION}.tar.xz"
+SRC_DIR="qtdeclarative-opensource-src-${VERSION}"
+PATCH_URI="5.1.0-cygwin-dlopen.patch"
+
+PKG_NAMES="libQt5Qml5 libQt5Qml-devel libQt5Quick5 libQt5Quick-devel
+           ${NAME}-tools ${NAME}-doc ${NAME}-examples"
+libQt5Qml5_CONTENTS="
+	usr/bin/cygQt5Qml-5.dll
+	usr/lib/qt5/plugins/qmltooling/cygqmldbg_tcp.dll
+	usr/lib/qt5/qml/Qt/
+	usr/lib/qt5/qml/QtQml/
+"
+libQt5Qml_devel_CONTENTS="
+	usr/include/qt5/QtQml/
+	usr/lib/cmake/Qt5Qml/
+	usr/lib/libQt5Qml.*
+	usr/lib/libQt5QmlDevTools.*
+	usr/lib/pkgconfig/Qt5Qml.pc
+	usr/lib/pkgconfig/Qt5QmlDevTools.pc
+	usr/lib/qt5/mkspecs/modules/qt_lib_qml.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_qmldevtools.pri
+"
+libQt5Quick5_CONTENTS="
+	usr/bin/cygQt5Quick-5.dll
+	usr/bin/cygQt5QuickParticles-5.dll
+	usr/bin/cygQt5QuickTest-5.dll
+	usr/lib/qt5/plugins/accessible/cygqtaccessiblequick.dll
+	usr/lib/qt5/plugins/qmltooling/cygqmldbg_qtquick2.dll
+	usr/lib/qt5/qml/QtQuick.2/
+	usr/lib/qt5/qml/QtQuick/
+	usr/lib/qt5/qml/QtTest/
+"
+libQt5Quick_devel_CONTENTS="
+	usr/include/qt5/QtQuick/
+	usr/include/qt5/QtQuickParticles/
+	usr/include/qt5/QtQuickTest/
+	usr/lib/cmake/Qt5Quick/
+	usr/lib/cmake/Qt5QuickTest/
+	usr/lib/libQt5Quick.*
+	usr/lib/libQt5QuickParticles.*
+	usr/lib/libQt5QuickTest.*
+	usr/lib/pkgconfig/Qt5Quick.pc
+	usr/lib/pkgconfig/Qt5QuickParticles.pc
+	usr/lib/pkgconfig/Qt5QuickTest.pc
+	usr/lib/qt5/mkspecs/modules/qt_lib_qmltest.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_quick.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_quickparticles.pri
+"
+qt5_declarative_tools_CATEGORY="X11"
+qt5_declarative_tools_CONTENTS="
+	usr/bin/qmlbundle-qt5
+	usr/bin/qmlmin-qt5
+	usr/bin/qmlplugindump-qt5
+	usr/bin/qmlprofiler-qt5
+	usr/bin/qmlscene-qt5
+	usr/bin/qmltestrunner-qt5
+	usr/lib/qt5/bin/qmlbundle.exe
+	usr/lib/qt5/bin/qmlmin.exe
+	usr/lib/qt5/bin/qmlplugindump.exe
+	usr/lib/qt5/bin/qmlprofiler.exe
+	usr/lib/qt5/bin/qmlscene.exe
+	usr/lib/qt5/bin/qmltestrunner.exe
+"
+qt5_declarative_doc_CATEGORY="Doc"
+qt5_declarative_doc_CONTENTS="
+	usr/share/qt5/doc/qtqml*
+	usr/share/qt5/doc/qtquick*
+"
+qt5_declarative_examples_CATEGORY="X11"
+qt5_declarative_examples_CONTENTS="
+	usr/lib/qt5/examples/qml/
+	usr/lib/qt5/examples/qmltest/
+	usr/lib/qt5/examples/quick/
+"
+
+src_compile() {
+	cd ${B}
+	cygqmake5 ${S}
+	cygmake
+	cygmake docs
+}
+
+src_install() {
+	local x xname
+
+	cd ${B}
+	qt5_qmake_install install_docs
+
+	for x in ${D}/usr/lib/qt5/bin/*.exe
+	do
+		xname=$(basename $x .exe)
+		dosym ../lib/qt5/bin/${xname}.exe /usr/bin/${xname}-qt5
+	done
+}
