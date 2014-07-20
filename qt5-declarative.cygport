@@ -1,7 +1,7 @@
 inherit qt5-qmake
 
 NAME="qt5-declarative"
-VERSION=5.1.0
+VERSION=5.2.1
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Qt C++ application framework (QML library)"
@@ -13,51 +13,53 @@ investments made on one platform across many others."
 HOMEPAGE="http://qt-project.org/"
 SRC_URI="http://download.qt-project.org/official_releases/qt/${VERSION%.*}/${VERSION}/submodules/qtdeclarative-opensource-src-${VERSION}.tar.xz"
 SRC_DIR="qtdeclarative-opensource-src-${VERSION}"
-PATCH_URI="5.1.0-cygwin-dlopen.patch"
+PATCH_URI="
+	5.1.0-cygwin-dlopen.patch
+	5.2.1-cygwin-jit.patch
+"
 
-PKG_NAMES="libQt5Qml5 libQt5Qml-devel libQt5Quick5 libQt5Quick-devel
-           ${NAME}-tools ${NAME}-doc ${NAME}-examples"
-libQt5Qml5_CONTENTS="
-	usr/bin/cygQt5Qml-5.dll
-	usr/lib/qt5/plugins/qmltooling/cygqmldbg_tcp.dll
-	usr/lib/qt5/qml/Qt/
-	usr/lib/qt5/qml/QtQml/
-"
-libQt5Qml_devel_CONTENTS="
-	usr/include/qt5/QtQml/
-	usr/lib/cmake/Qt5Qml/
-	usr/lib/libQt5Qml.*
-	usr/lib/libQt5QmlDevTools.*
-	usr/lib/pkgconfig/Qt5Qml.pc
-	usr/lib/pkgconfig/Qt5QmlDevTools.pc
-	usr/lib/qt5/mkspecs/modules/qt_lib_qml.pri
-	usr/lib/qt5/mkspecs/modules/qt_lib_qmldevtools.pri
-"
+PKG_NAMES="libQt5Quick5 libQt5Quick-devel ${NAME}-tools ${NAME}-doc ${NAME}-examples"
+libQt5Quick5_OBSOLETS="libQt5Qml5"
 libQt5Quick5_CONTENTS="
+	usr/bin/cygQt5Qml-5.dll
 	usr/bin/cygQt5Quick-5.dll
 	usr/bin/cygQt5QuickParticles-5.dll
 	usr/bin/cygQt5QuickTest-5.dll
 	usr/lib/qt5/plugins/accessible/cygqtaccessiblequick.dll
-	usr/lib/qt5/plugins/qmltooling/cygqmldbg_qtquick2.dll
+	usr/lib/qt5/plugins/qmltooling/
+	usr/lib/qt5/qml/Qt/
+	usr/lib/qt5/qml/QtQml/
 	usr/lib/qt5/qml/QtQuick.2/
 	usr/lib/qt5/qml/QtQuick/
 	usr/lib/qt5/qml/QtTest/
 "
+libQt5Quick_devel_OBSOLETS="libQt5Qml-devel"
 libQt5Quick_devel_CONTENTS="
+	usr/include/qt5/QtQml/
 	usr/include/qt5/QtQuick/
 	usr/include/qt5/QtQuickParticles/
 	usr/include/qt5/QtQuickTest/
+	usr/lib/cmake/Qt5Qml/
 	usr/lib/cmake/Qt5Quick/
 	usr/lib/cmake/Qt5QuickTest/
+	usr/lib/libQt5Qml.*
+	usr/lib/libQt5QmlDevTools.*
 	usr/lib/libQt5Quick.*
 	usr/lib/libQt5QuickParticles.*
 	usr/lib/libQt5QuickTest.*
+	usr/lib/pkgconfig/Qt5Qml.pc
+	usr/lib/pkgconfig/Qt5QmlDevTools.pc
 	usr/lib/pkgconfig/Qt5Quick.pc
 	usr/lib/pkgconfig/Qt5QuickParticles.pc
 	usr/lib/pkgconfig/Qt5QuickTest.pc
+	usr/lib/qt5/mkspecs/modules/qt_lib_qml.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_qml_private.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_qmldevtools_private.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_qmltest.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_qmltest_private.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_quick.pri
-	usr/lib/qt5/mkspecs/modules/qt_lib_quickparticles.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_quick_private.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_quickparticles_private.pri
 "
 qt5_declarative_tools_CATEGORY="X11"
 qt5_declarative_tools_CONTENTS="

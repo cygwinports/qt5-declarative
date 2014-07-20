@@ -1,0 +1,11 @@
+--- origsrc/qtdeclarative-opensource-src-5.2.1/src/qml/jsruntime/qv4global_p.h	2014-02-01 14:38:02.000000000 -0600
++++ src/qtdeclarative-opensource-src-5.2.1/src/qml/jsruntime/qv4global_p.h	2014-04-25 00:01:31.993898400 -0500
+@@ -84,7 +84,7 @@ inline double trunc(double d) { return d
+ 
+ // Black list some platforms
+ #if defined(V4_ENABLE_JIT)
+-#if defined(Q_OS_IOS) || defined(Q_OS_WIN64) || defined(Q_OS_WINRT)
++#if defined(Q_OS_IOS) || defined(Q_OS_WIN64) || defined(Q_OS_WINRT) || (defined(Q_OS_CYGWIN) && defined(__x86_64__))
+ #    undef V4_ENABLE_JIT
+ #endif
+ #endif
