@@ -19,12 +19,13 @@ PATCH_URI="
 "
 
 PKG_NAMES="libQt5Quick5 libQt5Quick-devel ${NAME}-tools ${NAME}-doc ${NAME}-examples"
-libQt5Quick5_OBSOLETS="libQt5Qml5"
+libQt5Quick5_OBSOLETES="libQt5Qml5"
 libQt5Quick5_CONTENTS="
 	usr/bin/cygQt5Qml-5.dll
 	usr/bin/cygQt5Quick-5.dll
 	usr/bin/cygQt5QuickParticles-5.dll
 	usr/bin/cygQt5QuickTest-5.dll
+	usr/lib/cmake/Qt5Widgets/Qt5Widgets_AccessibleQuickFactory.cmake
 	usr/lib/qt5/plugins/accessible/cygqtaccessiblequick.dll
 	usr/lib/qt5/plugins/qmltooling/
 	usr/lib/qt5/qml/Qt/
@@ -32,8 +33,9 @@ libQt5Quick5_CONTENTS="
 	usr/lib/qt5/qml/QtQuick.2/
 	usr/lib/qt5/qml/QtQuick/
 	usr/lib/qt5/qml/QtTest/
+	usr/share/doc/
 "
-libQt5Quick_devel_OBSOLETS="libQt5Qml-devel"
+libQt5Quick_devel_OBSOLETES="libQt5Qml-devel"
 libQt5Quick_devel_CONTENTS="
 	usr/include/qt5/QtQml/
 	usr/include/qt5/QtQuick/
@@ -63,18 +65,8 @@ libQt5Quick_devel_CONTENTS="
 "
 qt5_declarative_tools_CATEGORY="X11"
 qt5_declarative_tools_CONTENTS="
-	usr/bin/qmlbundle-qt5
-	usr/bin/qmlmin-qt5
-	usr/bin/qmlplugindump-qt5
-	usr/bin/qmlprofiler-qt5
-	usr/bin/qmlscene-qt5
-	usr/bin/qmltestrunner-qt5
-	usr/lib/qt5/bin/qmlbundle.exe
-	usr/lib/qt5/bin/qmlmin.exe
-	usr/lib/qt5/bin/qmlplugindump.exe
-	usr/lib/qt5/bin/qmlprofiler.exe
-	usr/lib/qt5/bin/qmlscene.exe
-	usr/lib/qt5/bin/qmltestrunner.exe
+	usr/bin/qml*-qt5
+	usr/lib/qt5/bin/qml*.exe
 "
 qt5_declarative_doc_CATEGORY="Doc"
 qt5_declarative_doc_CONTENTS="
