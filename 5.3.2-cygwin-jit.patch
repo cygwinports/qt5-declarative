@@ -1,0 +1,102 @@
+--- origsrc/qtdeclarative-opensource-src-5.3.2/src/3rdparty/masm/wtf/Platform.h	2014-09-11 05:48:30.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.3.2/src/3rdparty/masm/wtf/Platform.h	2014-10-26 05:55:52.288589900 -0500
+@@ -332,6 +332,11 @@
+ #define WTF_OS_AIX 1
+ #endif
+ 
++/* OS(CYGWIN) - Cygwin */
++#ifdef __CYGWIN__
++#define WTF_OS_CYGWIN 1
++#endif
++
+ /* OS(DARWIN) - Any Darwin-based OS, including Mac OS X and iPhone OS */
+ #ifdef __APPLE__
+ #define WTF_OS_DARWIN 1
+@@ -419,6 +424,7 @@
+ 
+ /* OS(UNIX) - Any Unix-like system */
+ #if   OS(AIX)              \
++    || OS(CYGWIN)           \
+     || OS(DARWIN)           \
+     || OS(FREEBSD)          \
+     || OS(HURD)             \
+--- origsrc/qtdeclarative-opensource-src-5.3.2/src/3rdparty/masm/yarr/YarrJIT.cpp	2014-09-11 05:48:30.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.3.2/src/3rdparty/masm/yarr/YarrJIT.cpp	2014-10-26 06:01:40.685517100 -0500
+@@ -87,7 +87,7 @@ class YarrGenerator : private MacroAssem
+     static const RegisterID returnRegister = X86Registers::eax;
+     static const RegisterID returnRegister2 = X86Registers::edx;
+ #elif CPU(X86_64)
+-#if !OS(WINDOWS)
++#if !OS(WINDOWS) && !OS(CYGWIN)
+     static const RegisterID input = X86Registers::edi;
+     static const RegisterID index = X86Registers::esi;
+     static const RegisterID length = X86Registers::edx;
+@@ -2532,7 +2532,7 @@ class YarrGenerator : private MacroAssem
+         // The ABI doesn't guarantee the upper bits are zero on unsigned arguments, so clear them ourselves.
+         zeroExtend32ToPtr(index, index);
+         zeroExtend32ToPtr(length, length);
+-#if OS(WINDOWS)
++#if OS(WINDOWS) || OS(CYGWIN)
+         if (compileMode == IncludeSubpatterns)
+             loadPtr(Address(X86Registers::ebp, 6 * sizeof(void*)), output);
+ #endif
+@@ -2575,7 +2575,7 @@ class YarrGenerator : private MacroAssem
+     void generateReturn()
+     {
+ #if CPU(X86_64)
+-#if OS(WINDOWS)
++#if OS(WINDOWS) || OS(CYGWIN)
+         // Store the return value in the allocated space pointed by rcx.
+         store64(returnRegister, Address(X86Registers::ecx));
+         store64(returnRegister2, Address(X86Registers::ecx, sizeof(void*)));
+--- origsrc/qtdeclarative-opensource-src-5.3.2/src/qml/jit/qv4assembler.cpp	2014-09-11 05:48:29.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.3.2/src/qml/jit/qv4assembler.cpp	2014-10-26 05:50:44.951011200 -0500
+@@ -104,7 +104,7 @@ static const Assembler::RegisterID calle
+     JSC::X86Registers::r14, // ContextRegister
+     JSC::X86Registers::r15
+ };
+-#  elif OS(WINDOWS)
++#  elif OS(WINDOWS) || OS(CYGWIN)
+ static const Assembler::RegisterID calleeSavedRegisters[] = {
+     JSC::X86Registers::ebx,
+     JSC::X86Registers::esi,
+--- origsrc/qtdeclarative-opensource-src-5.3.2/src/qml/jit/qv4assembler_p.h	2014-09-11 05:48:29.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.3.2/src/qml/jit/qv4assembler_p.h	2014-10-26 06:03:02.576201000 -0500
+@@ -177,7 +177,7 @@ public:
+ 
+     static const int RegisterSize = 8;
+ 
+-#if OS(WINDOWS)
++#if OS(WINDOWS) || OS(CYGWIN)
+     static const int RegisterArgumentCount = 4;
+     static RegisterID registerForArgument(int index)
+     {
+@@ -915,7 +915,7 @@ public:
+         if (argumentNumber < RegisterArgumentCount)
+             loadArgumentInRegister(value, registerForArgument(argumentNumber), argumentNumber);
+         else
+-#if OS(WINDOWS) && CPU(X86_64)
++#if (OS(WINDOWS) || OS(CYGWIN)) && CPU(X86_64)
+             loadArgumentOnStack<argumentNumber>(value, argumentNumber);
+ #else // Sanity:
+             loadArgumentOnStack<argumentNumber - RegisterArgumentCount>(value, argumentNumber);
+@@ -988,7 +988,7 @@ public:
+         loadArgumentOnStackOrRegister<0>(arg1);
+ 
+ #if (OS(LINUX) && CPU(X86) && (defined(__PIC__) || defined(__PIE__))) || \
+-    (OS(WINDOWS) && CPU(X86))
++    ((OS(WINDOWS) || OS(CYGWIN)) && CPU(X86))
+         load32(Address(StackFrameRegister, -int(sizeof(void*))),
+                JSC::X86Registers::ebx); // restore the GOT ptr
+ #endif
+--- origsrc/qtdeclarative-opensource-src-5.3.2/src/qml/jit/qv4isel_masm.cpp	2014-09-11 05:48:29.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.3.2/src/qml/jit/qv4isel_masm.cpp	2014-10-26 05:51:13.638652100 -0500
+@@ -275,7 +275,7 @@ static QVector<int> getFpRegisters()
+             << JSC::ARMRegisters::d6;
+     return fpRegisters;
+ }
+-#elif CPU(X86) && OS(WINDOWS)
++#elif CPU(X86) && (OS(WINDOWS) || OS(CYGWIN))
+ #  define REGALLOC_IS_SUPPORTED
+ static QVector<int> getIntRegisters()
+ {

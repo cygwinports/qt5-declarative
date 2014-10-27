@@ -1,7 +1,7 @@
 inherit qt5-qmake
 
 NAME="qt5-declarative"
-VERSION=5.2.1
+VERSION=5.3.2
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Qt C++ application framework (QML library)"
@@ -15,7 +15,7 @@ SRC_URI="http://download.qt-project.org/official_releases/qt/${VERSION%.*}/${VER
 SRC_DIR="qtdeclarative-opensource-src-${VERSION}"
 PATCH_URI="
 	5.1.0-cygwin-dlopen.patch
-	5.2.1-cygwin-jit.patch
+	5.3.2-cygwin-jit.patch
 "
 
 PKG_NAMES="libQt5Quick5 libQt5Quick-devel ${NAME}-tools ${NAME}-doc ${NAME}-examples"
@@ -25,7 +25,6 @@ libQt5Quick5_CONTENTS="
 	usr/bin/cygQt5Quick-5.dll
 	usr/bin/cygQt5QuickParticles-5.dll
 	usr/bin/cygQt5QuickTest-5.dll
-	usr/lib/cmake/Qt5Widgets/Qt5Widgets_AccessibleQuickFactory.cmake
 	usr/lib/qt5/plugins/accessible/cygqtaccessiblequick.dll
 	usr/lib/qt5/plugins/qmltooling/
 	usr/lib/qt5/qml/Qt/
