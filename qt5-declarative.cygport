@@ -25,6 +25,7 @@ libQt5Quick5_CONTENTS="
 	usr/bin/cygQt5Quick-5.dll
 	usr/bin/cygQt5QuickParticles-5.dll
 	usr/bin/cygQt5QuickTest-5.dll
+	usr/bin/cygQt5QuickWidgets-5.dll
 	usr/lib/qt5/plugins/accessible/cygqtaccessiblequick.dll
 	usr/lib/qt5/plugins/qmltooling/
 	usr/lib/qt5/qml/Qt/
@@ -40,19 +41,23 @@ libQt5Quick_devel_CONTENTS="
 	usr/include/qt5/QtQuick/
 	usr/include/qt5/QtQuickParticles/
 	usr/include/qt5/QtQuickTest/
+	usr/include/qt5/QtQuickWidgets/
 	usr/lib/cmake/Qt5Qml/
 	usr/lib/cmake/Qt5Quick/
 	usr/lib/cmake/Qt5QuickTest/
+	usr/lib/cmake/Qt5QuickWidgets/
 	usr/lib/libQt5Qml.*
 	usr/lib/libQt5QmlDevTools.*
 	usr/lib/libQt5Quick.*
 	usr/lib/libQt5QuickParticles.*
 	usr/lib/libQt5QuickTest.*
+	usr/lib/libQt5QuickWidgets.*
 	usr/lib/pkgconfig/Qt5Qml.pc
 	usr/lib/pkgconfig/Qt5QmlDevTools.pc
 	usr/lib/pkgconfig/Qt5Quick.pc
 	usr/lib/pkgconfig/Qt5QuickParticles.pc
 	usr/lib/pkgconfig/Qt5QuickTest.pc
+	usr/lib/pkgconfig/Qt5QuickWidgets.pc
 	usr/lib/qt5/mkspecs/modules/qt_lib_qml.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_qml_private.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_qmldevtools_private.pri
@@ -61,6 +66,8 @@ libQt5Quick_devel_CONTENTS="
 	usr/lib/qt5/mkspecs/modules/qt_lib_quick.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_quick_private.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_quickparticles_private.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_quickwidgets.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_quickwidgets_private.pri
 "
 qt5_declarative_tools_CATEGORY="X11"
 qt5_declarative_tools_CONTENTS="
