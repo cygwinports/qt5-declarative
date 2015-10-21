@@ -1,7 +1,7 @@
 inherit qt5-qmake
 
 NAME="qt5-declarative"
-VERSION=5.4.2
+VERSION=5.5.1
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Qt C++ application framework (QML library)"
@@ -37,6 +37,7 @@ libQt5Quick5_CONTENTS="
 libQt5Quick_devel_OBSOLETES="libQt5Qml-devel"
 libQt5Quick_devel_CONTENTS="
 	usr/include/qt5/QtQml/
+	usr/include/qt5/QtQmlDevTools/
 	usr/include/qt5/QtQuick/
 	usr/include/qt5/QtQuickParticles/
 	usr/include/qt5/QtQuickTest/
