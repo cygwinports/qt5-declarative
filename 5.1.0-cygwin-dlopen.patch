@@ -9,6 +9,6 @@
 +                         QStringList()
 +                         << QLatin1String(".dll"),
 +                         QLatin1String("cyg"));
- # else  // Generic Unix
-     QStringList validSuffixList;
- 
+ # else  // Unix
+     return resolvePlugin(typeLoader, qmldirPath, qmldirPluginPath, baseName, QStringList() << QLatin1String(".so"), QLatin1String("lib"));
+ #endif

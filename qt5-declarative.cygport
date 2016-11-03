@@ -1,7 +1,7 @@
 inherit qt5-qmake
 
 NAME="qt5-declarative"
-VERSION=5.5.1
+VERSION=5.6.2
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Qt C++ application framework (QML library)"
@@ -10,8 +10,8 @@ embedded development. Qt enables programmers to create advanced GUI
 applications once and deploy them to Windows, Mac OS X and Linux without
 rewriting the source code. Companies using Qt can leverage software
 investments made on one platform across many others."
-HOMEPAGE="http://qt-project.org/"
-SRC_URI="http://download.qt-project.org/official_releases/qt/${VERSION%.*}/${VERSION}/submodules/qtdeclarative-opensource-src-${VERSION}.tar.xz"
+HOMEPAGE="https://www.qt.io/"
+SRC_URI="http://download.qt.io/official_releases/qt/${VERSION%.*}/${VERSION}/submodules/qtdeclarative-opensource-src-${VERSION}.tar.xz"
 SRC_DIR="qtdeclarative-opensource-src-${VERSION}"
 PATCH_URI="
 	5.1.0-cygwin-dlopen.patch
@@ -27,6 +27,7 @@ libQt5Quick5_CONTENTS="
 	usr/bin/cygQt5QuickTest-5.dll
 	usr/bin/cygQt5QuickWidgets-5.dll
 	usr/lib/qt5/plugins/qmltooling/
+	usr/lib/qt5/qml/builtins.qmltypes
 	usr/lib/qt5/qml/Qt/
 	usr/lib/qt5/qml/QtQml/
 	usr/lib/qt5/qml/QtQuick.2/
@@ -53,9 +54,7 @@ libQt5Quick_devel_CONTENTS="
 	usr/lib/libQt5QuickTest.*
 	usr/lib/libQt5QuickWidgets.*
 	usr/lib/pkgconfig/Qt5Qml.pc
-	usr/lib/pkgconfig/Qt5QmlDevTools.pc
 	usr/lib/pkgconfig/Qt5Quick.pc
-	usr/lib/pkgconfig/Qt5QuickParticles.pc
 	usr/lib/pkgconfig/Qt5QuickTest.pc
 	usr/lib/pkgconfig/Qt5QuickWidgets.pc
 	usr/lib/qt5/mkspecs/modules/qt_lib_qml.pri
