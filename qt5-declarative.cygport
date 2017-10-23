@@ -1,7 +1,7 @@
 inherit qt5-qmake
 
 NAME="qt5-declarative"
-VERSION=5.6.2
+VERSION=5.9.2
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Qt C++ application framework (QML library)"
@@ -14,8 +14,8 @@ HOMEPAGE="https://www.qt.io/"
 SRC_URI="http://download.qt.io/official_releases/qt/${VERSION%.*}/${VERSION}/submodules/qtdeclarative-opensource-src-${VERSION}.tar.xz"
 SRC_DIR="qtdeclarative-opensource-src-${VERSION}"
 PATCH_URI="
-	5.1.0-cygwin-dlopen.patch
-	5.4.1-cygwin-jit.patch
+	5.9-cygwin-dlopen.patch
+	5.9-cygwin-jit.patch
 "
 
 PKG_NAMES="libQt5Quick5 libQt5Quick-devel ${NAME}-tools ${NAME}-doc ${NAME}-examples"
@@ -37,8 +37,9 @@ libQt5Quick5_CONTENTS="
 "
 libQt5Quick_devel_OBSOLETES="libQt5Qml-devel"
 libQt5Quick_devel_CONTENTS="
+	usr/include/qt5/QtPacketProtocol
 	usr/include/qt5/QtQml/
-	usr/include/qt5/QtQmlDevTools/
+	usr/include/qt5/QtQmlDebug/
 	usr/include/qt5/QtQuick/
 	usr/include/qt5/QtQuickParticles/
 	usr/include/qt5/QtQuickTest/
@@ -47,7 +48,9 @@ libQt5Quick_devel_CONTENTS="
 	usr/lib/cmake/Qt5Quick/
 	usr/lib/cmake/Qt5QuickTest/
 	usr/lib/cmake/Qt5QuickWidgets/
+	usr/lib/libQt5PacketProtocol.*
 	usr/lib/libQt5Qml.*
+	usr/lib/libQt5QmlDebug.*
 	usr/lib/libQt5QmlDevTools.*
 	usr/lib/libQt5Quick.*
 	usr/lib/libQt5QuickParticles.*
@@ -57,8 +60,11 @@ libQt5Quick_devel_CONTENTS="
 	usr/lib/pkgconfig/Qt5Quick.pc
 	usr/lib/pkgconfig/Qt5QuickTest.pc
 	usr/lib/pkgconfig/Qt5QuickWidgets.pc
+	usr/lib/qt5/mkspecs/features/qmlcache.prf
+	usr/lib/qt5/mkspecs/modules/qt_lib_packetprotocol_private.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_qml.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_qml_private.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_qmldebug_private.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_qmldevtools_private.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_qmltest.pri
 	usr/lib/qt5/mkspecs/modules/qt_lib_qmltest_private.pri

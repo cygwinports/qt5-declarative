@@ -1,0 +1,12 @@
+--- origsrc/qtdeclarative-opensource-src-5.9.2/src/qml/qml/qqmlimport.cpp	2017-09-28 14:01:41.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.9.2/src/qml/qml/qqmlimport.cpp	2017-10-23 02:58:47.489336100 -0500
+@@ -1808,6 +1808,9 @@ QString QQmlImportDatabase::resolvePlugi
+         QLatin1String(".so"),
+         QLatin1String(".bundle")
+     };
++# elif defined(Q_OS_CYGWIN)
++    static const QString prefix = QLatin1String("cyg");
++    static const QStringList suffixes = { QLatin1String(".dll") };
+ # else  // Unix
+     static const QString prefix = QLatin1String("lib");
+     static const QStringList suffixes = { QLatin1String(".so") };

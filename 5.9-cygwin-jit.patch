@@ -1,0 +1,115 @@
+--- origsrc/qtdeclarative-opensource-src-5.9.2/src/3rdparty/masm/wtf/Platform.h	2017-09-28 14:01:41.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.9.2/src/3rdparty/masm/wtf/Platform.h	2017-10-23 09:32:08.606327600 -0500
+@@ -340,6 +340,11 @@
+ #define WTF_OS_AIX 1
+ #endif
+ 
++/* OS(CYGWIN) - Cygwin */
++#ifdef __CYGWIN__
++#define WTF_OS_CYGWIN 1
++#endif
++
+ /* OS(DARWIN) - Any Darwin-based OS, including Mac OS X and iPhone OS */
+ #ifdef __APPLE__
+ #define WTF_OS_DARWIN 1
+@@ -437,6 +442,7 @@
+ 
+ /* OS(UNIX) - Any Unix-like system */
+ #if   OS(AIX)              \
++    || OS(CYGWIN)           \
+     || OS(DARWIN)           \
+     || OS(FREEBSD)          \
+     || OS(HURD)             \
+@@ -890,7 +896,7 @@
+ /* Pick which allocator to use; we only need an executable allocator if the assembler is compiled in.
+    On x86-64 we use a single fixed mmap, on other platforms we mmap on demand. */
+ #if ENABLE(ASSEMBLER)
+-#if CPU(X86_64) && !OS(WINDOWS) || PLATFORM(IOS) || CPU(ARM64)
++#if CPU(X86_64) && !OS(WINDOWS) && !OS(CYGWIN) || PLATFORM(IOS) || CPU(ARM64)
+ #define ENABLE_EXECUTABLE_ALLOCATOR_FIXED 1
+ #else
+ #define ENABLE_EXECUTABLE_ALLOCATOR_DEMAND 1
+--- origsrc/qtdeclarative-opensource-src-5.9.2/src/3rdparty/masm/yarr/YarrJIT.cpp	2017-09-28 14:01:41.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.9.2/src/3rdparty/masm/yarr/YarrJIT.cpp	2017-10-23 09:21:08.582051000 -0500
+@@ -98,7 +98,7 @@ class YarrGenerator : private DefaultMac
+     static const RegisterID returnRegister = X86Registers::eax;
+     static const RegisterID returnRegister2 = X86Registers::edx;
+ #elif CPU(X86_64)
+-#if !OS(WINDOWS)
++#if !OS(WINDOWS) && !OS(CYGWIN)
+     static const RegisterID input = X86Registers::edi;
+     static const RegisterID index = X86Registers::esi;
+     static const RegisterID length = X86Registers::edx;
+@@ -2557,7 +2557,7 @@ class YarrGenerator : private DefaultMac
+         // The ABI doesn't guarantee the upper bits are zero on unsigned arguments, so clear them ourselves.
+         zeroExtend32ToPtr(index, index);
+         zeroExtend32ToPtr(length, length);
+-#if OS(WINDOWS)
++#if OS(WINDOWS) || OS(CYGWIN)
+         if (compileMode == IncludeSubpatterns)
+             loadPtr(Address(X86Registers::ebp, 6 * sizeof(void*)), output);
+ #endif
+@@ -2603,7 +2603,7 @@ class YarrGenerator : private DefaultMac
+     void generateReturn()
+     {
+ #if CPU(X86_64)
+-#if OS(WINDOWS)
++#if OS(WINDOWS) || OS(CYGWIN)
+         // Store the return value in the allocated space pointed by rcx.
+         store64(returnRegister, Address(X86Registers::ecx));
+         store64(returnRegister2, Address(X86Registers::ecx, sizeof(void*)));
+--- origsrc/qtdeclarative-opensource-src-5.9.2/src/qml/jit/qv4assembler_p.h	2017-09-28 14:01:41.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.9.2/src/qml/jit/qv4assembler_p.h	2017-10-23 09:46:19.333567600 -0500
+@@ -116,7 +116,7 @@ typedef AssemblerTargetConfiguration<Def
+ #elif CPU(X86_64)
+ typedef JSC::MacroAssemblerX86_64 DefaultPlatformMacroAssembler;
+ 
+-#if OS(WINDOWS)
++#if OS(WINDOWS) || OS(CYGWIN)
+ typedef AssemblerTargetConfiguration<DefaultPlatformMacroAssembler, WindowsSpecialization> DefaultAssemblerTargetConfiguration;
+ #else
+ typedef AssemblerTargetConfiguration<DefaultPlatformMacroAssembler, NoOperatingSystemSpecialization> DefaultAssemblerTargetConfiguration;
+--- origsrc/qtdeclarative-opensource-src-5.9.2/src/qml/jit/qv4targetplatform_p.h	2017-09-28 14:01:41.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.9.2/src/qml/jit/qv4targetplatform_p.h	2017-10-23 03:05:23.550534100 -0500
+@@ -90,7 +90,7 @@ class TargetPlatform
+ {
+ };
+ 
+-#if CPU(X86) && (OS(LINUX) || OS(WINDOWS) || OS(QNX) || OS(FREEBSD) || defined(Q_OS_IOS))
++#if CPU(X86) && (OS(LINUX) || OS(WINDOWS) || OS(CYGWIN) || OS(QNX) || OS(FREEBSD) || defined(Q_OS_IOS))
+ template <>
+ class TargetPlatform<JSC::MacroAssemblerX86, NoOperatingSystemSpecialization>
+ {
+@@ -149,7 +149,7 @@ public:
+         as->pop(FramePointerRegister);
+     }
+ 
+-#if OS(WINDOWS) || OS(QNX) || \
++#if OS(WINDOWS) || OS(CYGWIN) || OS(QNX) || \
+     ((OS(LINUX) || OS(FREEBSD)) && (defined(__PIC__) || defined(__PIE__)))
+ 
+     static const int gotRegister = JSC::X86Registers::ebx;
+@@ -263,7 +263,7 @@ public:
+ };
+ #endif // Linux/MacOS on x86_64
+ 
+-#if CPU(X86_64) && OS(WINDOWS)
++#if CPU(X86_64) && (OS(WINDOWS) || OS(CYGWIN))
+ template <>
+ class TargetPlatform<JSC::MacroAssemblerX86_64, WindowsSpecialization>
+ {
+--- origsrc/qtdeclarative-opensource-src-5.9.2/src/qml/jsruntime/qv4global_p.h	2017-09-28 14:01:41.000000000 -0500
++++ src/qtdeclarative-opensource-src-5.9.2/src/qml/jsruntime/qv4global_p.h	2017-10-23 09:12:34.487143700 -0500
+@@ -92,10 +92,10 @@ inline double trunc(double d) { return d
+ // NOTE: This should match the logic in qv4targetplatform_p.h!
+ 
+ #if defined(Q_PROCESSOR_X86) && (QT_POINTER_SIZE == 4) \
+-    && (defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_QNX) || defined(Q_OS_FREEBSD))
++    && (defined(Q_OS_WIN) || defined(Q_OS_CYGWIN) || defined(Q_OS_LINUX) || defined(Q_OS_QNX) || defined(Q_OS_FREEBSD))
+ #  define V4_ENABLE_JIT
+ #elif defined(Q_PROCESSOR_X86_64) && (QT_POINTER_SIZE == 8) \
+-    && (defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC) || defined(Q_OS_FREEBSD))
++    && (defined(Q_OS_WIN) || defined(Q_OS_CYGWIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC) || defined(Q_OS_FREEBSD))
+ #  define V4_ENABLE_JIT
+ #elif defined(Q_PROCESSOR_ARM_32) && (QT_POINTER_SIZE == 4)
+ #  if defined(thumb2) || defined(__thumb2__) || ((defined(__thumb) || defined(__thumb__)) && __TARGET_ARCH_THUMB-0 == 4)
