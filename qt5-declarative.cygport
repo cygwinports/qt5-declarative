@@ -15,7 +15,6 @@ SRC_URI="http://download.qt.io/official_releases/qt/${VERSION%.*}/${VERSION}/sub
 SRC_DIR="qtdeclarative-opensource-src-${VERSION}"
 PATCH_URI="
 	5.9-cygwin-dlopen.patch
-	5.9-cygwin-jit.patch
 "
 
 PKG_NAMES="libQt5Quick5 libQt5Quick-devel ${NAME}-tools ${NAME}-doc ${NAME}-examples"
